@@ -173,7 +173,7 @@ public class Engine
       ResourceCallback cb,
       Executor callbackExecutor) {
     long startTime = VERBOSE_IS_LOGGABLE ? LogTime.getLogTime() : 0;
-
+	//生成key
     EngineKey key =
         keyFactory.buildKey(
             model,
@@ -187,6 +187,7 @@ public class Engine
 
     EngineResource<?> memoryResource;
     synchronized (this) {
+		//内存缓存
       memoryResource = loadFromMemory(key, isMemoryCacheable, startTime);
 
       if (memoryResource == null) {
@@ -298,7 +299,7 @@ public class Engine
     if (!isMemoryCacheable) {
       return null;
     }
-
+	//活动缓存
     EngineResource<?> active = loadFromActiveResources(key);
     if (active != null) {
       if (VERBOSE_IS_LOGGABLE) {
@@ -306,7 +307,7 @@ public class Engine
       }
       return active;
     }
-
+	//内存LruCache
     EngineResource<?> cached = loadFromCache(key);
     if (cached != null) {
       if (VERBOSE_IS_LOGGABLE) {
@@ -333,15 +334,16 @@ public class Engine
   }
 
   private EngineResource<?> loadFromCache(Key key) {
-    EngineResource<?> cached = getEngineResourceFromCache(key);
+    EngineResource<?> cached = getEngineResourceFromCache(key);////从内存LruCache中装饰成EngineResource
     if (cached != null) {
-      cached.acquire();
-      activeResources.activate(key, cached);
+      cached.acquire();//从内存LruCache中取出
+      activeResources.activate(key, cached);//加入到活动缓存
     }
     return cached;
   }
 
   private EngineResource<?> getEngineResourceFromCache(Key key) {
+  //cache=LruResourceCache
     Resource<?> cached = cache.remove(key);
 
     final EngineResource<?> result;

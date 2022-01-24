@@ -211,6 +211,7 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
     }
   }
 
+  //请求发起入口
   @Override
   public void begin() {
     synchronized (requestLock) {
@@ -252,10 +253,12 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
 
       cookie = GlideTrace.beginSectionAsync(TAG);
       status = Status.WAITING_FOR_SIZE;
-      if (Util.isValidDimensions(overrideWidth, overrideHeight)) {
+      if (Util.isValidDimensions(overrideWidth, overrideHeight)) { //尺寸已准备好
         onSizeReady(overrideWidth, overrideHeight);
       } else {
-        target.getSize(this);
+      // target = glideContext.buildImageViewTarget(view, transcodeClass)
+      //target=BitmapImageViewTarget/DrawableImageViewTarget
+        target.getSize(this); //去获取尺寸
       }
 
       if ((status == Status.RUNNING || status == Status.WAITING_FOR_SIZE)
@@ -464,6 +467,8 @@ public final class SingleRequest<R> implements Request, SizeReadyCallback, Resou
       if (IS_VERBOSE_LOGGABLE) {
         logV("finished setup for calling load in " + LogTime.getElapsedMillis(startTime));
       }
+	  //拿到图片尺寸后，使用Engine去load
+	  //engine = glideContext.getEngine()
       loadStatus =
           engine.load(
               glideContext,

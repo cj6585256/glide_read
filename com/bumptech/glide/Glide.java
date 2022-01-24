@@ -111,6 +111,7 @@ import java.util.Set;
  * RequestBuilder} and maintaining an {@link Engine}, {@link BitmapPool}, {@link
  * com.bumptech.glide.load.engine.cache.DiskCache} and {@link MemoryCache}.
  */
+ //单例入口
 public class Glide implements ComponentCallbacks2 {
   private static final String DEFAULT_DISK_CACHE_DIR = "image_manager_disk_cache";
   private static final String TAG = "Glide";
@@ -270,12 +271,15 @@ public class Glide implements ComponentCallbacks2 {
 
   @GuardedBy("Glide.class")
   @SuppressWarnings("deprecation")
+  //初始化Glide
   private static void initializeGlide(
       @NonNull Context context,
       @NonNull GlideBuilder builder,
       @Nullable GeneratedAppGlideModule annotationGeneratedModule) {
+      //context使用ApplicationContext
     Context applicationContext = context.getApplicationContext();
     List<com.bumptech.glide.module.GlideModule> manifestModules = Collections.emptyList();
+	//manifest配置解析
     if (annotationGeneratedModule == null || annotationGeneratedModule.isManifestParsingEnabled()) {
       manifestModules = new ManifestParser(applicationContext).parse();
     }

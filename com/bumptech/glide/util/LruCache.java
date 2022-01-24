@@ -15,6 +15,7 @@ import java.util.Map;
  * @param <Y> The type of the values.
  */
 public class LruCache<T, Y> {
+//LRU算法通过LinkedHashMap的第三个参数，true代表按照操作顺序排序，false表示按照插入顺序排序
   private final Map<T, Entry<Y>> cache = new LinkedHashMap<>(100, 0.75f, true);
   private final long initialMaxSize;
   private long maxSize;

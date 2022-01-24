@@ -25,17 +25,20 @@ public class RequestTracker {
   // side affects, WeakReferences are still essentially required. A user can always make repeated
   // requests into targets other than views, or use an activity manager in a fragment pager where
   // holding strong references would steadily leak bitmaps and/or views.
+  //set集保证请求唯一，WeakHashMap防止内存泄露
   private final Set<Request> requests =
       Collections.newSetFromMap(new WeakHashMap<Request, Boolean>());
   // A set of requests that have not completed and are queued to be run again. We use this list to
   // maintain hard references to these requests to ensure that they are not garbage collected
   // before they start running or while they are paused. See #346.
+  //set集保证请求唯一，未完成或者等待运行的request，保持强引用防止被gc
   private final Set<Request> pendingRequests = new HashSet<>();
 
   private boolean isPaused;
 
   /** Starts tracking the given request. */
   public void runRequest(@NonNull Request request) {
+  	//当前请求加入请求集
     requests.add(request);
     if (!isPaused) {
       request.begin();
@@ -44,6 +47,7 @@ public class RequestTracker {
       if (Log.isLoggable(TAG, Log.VERBOSE)) {
         Log.v(TAG, "Paused, delaying request");
       }
+	  //暂停了的请求，加入pendingRequests集防止gc被释放
       pendingRequests.add(request);
     }
   }

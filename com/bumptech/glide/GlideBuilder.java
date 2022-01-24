@@ -39,6 +39,7 @@ import java.util.Map;
 
 /** A builder class for setting default structural classes for Glide to use. */
 @SuppressWarnings("PMD.ImmutableField")
+//Glide各种参数，抽出一个GlideBuilder类来了
 public final class GlideBuilder {
   private final Map<Class<?>, TransitionOptions<?, ?>> defaultTransitionOptions = new ArrayMap<>();
   private final GlideExperiments.Builder glideExperimentsBuilder = new GlideExperiments.Builder();
@@ -525,6 +526,7 @@ public final class GlideBuilder {
       connectivityMonitorFactory = new DefaultConnectivityMonitorFactory();
     }
 
+	//Lru Bitmap池
     if (bitmapPool == null) {
       int size = memorySizeCalculator.getBitmapPoolSize();
       if (size > 0) {
@@ -534,10 +536,11 @@ public final class GlideBuilder {
       }
     }
 
+	//Lru Array池
     if (arrayPool == null) {
       arrayPool = new LruArrayPool(memorySizeCalculator.getArrayPoolSizeInBytes());
     }
-
+	//内存缓存
     if (memoryCache == null) {
       memoryCache = new LruResourceCache(memorySizeCalculator.getMemoryCacheSize());
     }

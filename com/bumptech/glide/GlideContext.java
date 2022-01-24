@@ -23,6 +23,7 @@ import java.util.Map.Entry;
  * required to load resources.
  */
 @SuppressWarnings("PMD.DataClass")
+//ContextWrapper？
 public class GlideContext extends ContextWrapper {
   @VisibleForTesting
   static final TransitionOptions<?, ?> DEFAULT_TRANSITION_OPTIONS =
@@ -94,9 +95,13 @@ public class GlideContext extends ContextWrapper {
     return (TransitionOptions<?, T>) result;
   }
 
+	//通过工厂创建ViewTarget的具体子类ImageViewTarget
+	//ImageViewTarget extend ViewTarget,ViewTarget extend BaseTarget,
+	//BaseTarget implements Target,Target接口 extend LifecycleListener接口
   @NonNull
   public <X> ViewTarget<ImageView, X> buildImageViewTarget(
       @NonNull ImageView imageView, @NonNull Class<X> transcodeClass) {
+      //泛型X来确定具体的ImageView需要的类型，Drawable、Bitmap
     return imageViewTargetFactory.buildTarget(imageView, transcodeClass);
   }
 

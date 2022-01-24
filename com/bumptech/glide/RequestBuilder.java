@@ -789,7 +789,8 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
     if (!isModelSet) {
       throw new IllegalArgumentException("You must call #load() before calling #into()");
     }
-
+	//构建请求
+	//最终返回的是SingleRequest.obtain(XX)
     Request request = buildRequest(target, targetListener, options, callbackExecutor);
 
     Request previous = target.getRequest();
@@ -803,8 +804,10 @@ public class RequestBuilder<TranscodeType> extends BaseRequestOptions<RequestBui
         // Use the previous request rather than the new one to allow for optimizations like skipping
         // setting placeholders, tracking and un-tracking Targets, and obtaining View dimensions
         // that are done in the individual Request.
+        //上一请求还在执行，继续执行
         previous.begin();
       }
+	  //不跳过内存缓冲 && 当前请求==上一请求 && 上一请求已经完成    。返回target
       return target;
     }
 

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
  * A factory responsible for producing the correct type of {@link
  * com.bumptech.glide.request.target.Target} for a given {@link android.view.View} subclass.
  */
+ //ImageViewTarget工厂
 public class ImageViewTargetFactory {
   @NonNull
   @SuppressWarnings("unchecked")
